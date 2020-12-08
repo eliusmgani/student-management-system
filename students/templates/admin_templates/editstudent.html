@@ -1,0 +1,26 @@
+{% extends 'admin_templates/base.html' %}
+{% load static %}
+{% block page_title %}
+Edit Student | Username: {{username}} #Id: {{id}}
+{% endblock page_title %}
+{% block main_content %}
+<!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-info">
+            <div class="card-header">
+              <h3 class="card-title" style="text-align: center;">Student's Details</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            {% url 'EditStudentSave' as action_path %}
+            {% include 'admin_templates/form_templates.html' with messages=messages form=form action_path=action_path button_text="Save" %}
+          </div>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+<!-- /.content -->
+{% endblock main_content %}

@@ -1,0 +1,161 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="index3.html" class="brand-link">
+    <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+         style="opacity: .8">
+    <span class="brand-text font-weight-light">mgTech </span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+        <a href="#" class="d-block">{{user.username}}</a>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          {% url 'AddStaff' as AddStaff %}
+          <a href="{{ AddStaff }}" class="nav-link" {% if request.path == AddStaff %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Staff
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'ManageStaffs' as ManageStaffs %}
+          {% url 'EditStaff' staff_id=id as EditStaff %}
+          <a href="{{ ManageStaffs }}" class="nav-link" {% if request.path == ManageStaffs %} active {% endif %} {% if request.path == EditStaff %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Manage Staffs
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'AddStudent' as AddStudent %}
+          <a href="{{ AddStudent }}" class="nav-link" {% if request.path == AddStudent %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Student
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'ManageStudents' as ManageStudents %}
+          {% url 'EditStudent' student_id=id as EditStudent %}
+          <a href="{{ ManageStudents }}" class="nav-link" {% if request.path == ManageStudents %} active {% endif %} {% if request.path == EditStudent %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Manage Students
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'AddCourse' as AddCourse %}
+          <a href="{{ AddCourse }}" class="nav-link" {% if request.path == AddCourse %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Course
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+         {% url 'ManageCourses' as ManageCourses %}
+         {% url 'EditCourse' course_id=id as EditCourse %}
+          <a href="{{ ManageCourses }}" class="nav-link" {% if request.path == ManageCourses %} active {% endif %} {% if request.path == EditCourse %} active {% endif %}>
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Manage Courses
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'AddSubject' as AddSubject %}
+          <a href="{{ AddSubject }}" class="nav-link" {% if request.path == AddSubject %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Subject
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          {% url 'ManageSubjects' as ManageSubjects %}
+          {% url 'EditSubject' subject_id=id as EditSubject %}
+          <a href="{{ ManageSubjects }}" class="nav-link" {% if request.path == ManageSubjects %} active {% endif %} {% if request.path == EditSubject %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Manage Subjects
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'AddStaff' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              View Attendance
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'AddStaff' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Student Feedback
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'AddStaff' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Staff Feedback
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'AddStaff' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Student Leave
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'AddStaff' %}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Staff Leave
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
