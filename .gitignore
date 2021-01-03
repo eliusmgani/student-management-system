@@ -117,3 +117,7 @@ ENV/
 *.jpeg
 *.jpg
 
+
+
+#git config core.autocrlf true
+
