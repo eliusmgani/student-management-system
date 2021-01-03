@@ -1,40 +1,28 @@
 {% extends 'admin_templates/base.html' %}
 {% load static %}
-{% block page_title %}Add Subject{% endblock page_title %}
+{% block page_title %}Add Session Year{% endblock page_title %}
 {% block main_content %}
 <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <div class="card card-success">
+          <div class="card card-dark">
             <div class="card-header">
-              <h3 class="card-title" style="text-align: center;">Add Subject</h3>
+              <h3 class="card-title" style="text-align: center;">Add Session Year</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form role="form" action="/addsubjectsave" method="POST">
+            <form role="form" action="/addsessionsave" method="POST">
               {% csrf_token %}
               <div class="card-body">
                 <div class="form-group">
-                  <label>Subject Name</label>
-                  <input type="text" class="form-control" name="subject_name" placeholder="Enter Subject Name">
+                  <label>Session Start Year</label>
+                  <input type="date" class="form-control" name="session_start_year" placeholder="Enter Session Start Year">
                 </div>
                 <div class="form-group">
-                  <label>Course</label>
-                  <select class="form-control" name="course">
-                    {% for course in courses %}
-                      <option value="{{course.id}}">{{course.course_name}}</option>
-                    {%endfor%}
-                  </select>
-                </div>
-                <div class="form-grou">
-                  <label>Subject Teacher</label>
-                  <select class="form-control" name="staff">
-                    {% for staff in staffs %}
-                      <option value="{{staff.id}}">{{staff.username}}</option>
-                    {%endfor%}
-                  </select>
+                  <label>Session End Year</label>
+                  <input type="date" class="form-control" name="session_end_year" placeholder="Enter Session End Year">
                 </div>
                 <div class="form-group">
                   {% if messages %}
@@ -52,7 +40,7 @@
               <!-- /.card-body -->
 
               <div class="card-footer">
-                <button type="submit" class="btn btn-success btn-block">Submit</button>
+                <button type="submit" class="btn btn-dark btn-block">Submit</button>
               </div>
             </form>
           </div>

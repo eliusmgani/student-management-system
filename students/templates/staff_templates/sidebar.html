@@ -34,7 +34,16 @@
             </p>
           </a>
         </li>
-        
+        <li class="nav-item">
+          {% url 'StaffTakeAttendance' as StaffTakeAttendance %}
+          <a href="{{ StaffTakeAttendance }}" class="nav-link" {% if request.path == StaffTakeAttendance %} active {% endif %} >
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Take Attendance
+              <span class="right badge badge-light">New</span>
+            </p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

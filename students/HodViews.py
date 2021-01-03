@@ -2,9 +2,10 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from . forms import AddStudentForm, EditStudentForm
-from . models import CustomUser, Staffs, Students, Courses, Subjects
+from . models import CustomUser, Staffs, Students, Courses, Subjects, SessionYearModel
 from django.core.files.storage import FileSystemStorage #Used for uploading Profile Picture
 from django.http import HttpResponse, HttpResponseRedirect
+
 
 def adminhome(request):
     return render(request, "admin_templates/main.html")
@@ -92,9 +93,10 @@ def addcoursesave(request):
         return HttpResponseRedirect(reverse("AddCourse"))
     else:
         course = request.POST.get("course")
+        course_duration = request.POST.get("course_duration")
 
         try:
-            course_model = Courses(course_name=course)
+            course_model = Courses(course_name=course, course_duration=course_duration)
             course_model.save()
             messages.success(request, f'Course Added Successfully..!!')
             return HttpResponseRedirect(reverse("AddCourse"))
@@ -124,10 +126,12 @@ def editcoursesave(request):
     else:
         course_id = request.POST.get("course_id")
         course_name = request.POST.get("course")
+        course_duration = request.POST.get("course_duration")
 
         try:
             course = Courses.objects.get(id=course_id)
             course.course_name=course_name
+            course.course_duration=course_duration
             course.save()
             messages.success(request, f'Course Edited Successfully..!!')
             return HttpResponseRedirect(reverse("EditCourse", kwargs={"course_id": course_id}))
@@ -136,11 +140,11 @@ def editcoursesave(request):
             return HttpResponseRedirect(reverse("EditCourse", kwargs={"course_id": course_id}))
 
 def addstudent(request):
-    #courses = Courses.objects.all()
+    courses = Courses.objects.all()
     form = AddStudentForm
     context = {
         'form': form,
-        #'courses':courses
+        'courses':courses
     }
     return render(request, "admin_templates/addstudent.html", context)
 
@@ -159,8 +163,8 @@ def addstudentsave(request):
             address = form.cleaned_data["address"]
             course_id = form.cleaned_data["course"]
             gender = form.cleaned_data["gender"]
-            session_start_year = form.cleaned_data["start_year"]
-            session_end_year = form.cleaned_data["end_year"]
+            session_year_id = form.cleaned_data["session_year_id"]
+            #session_end_year = form.cleaned_data["end_year"]
 
             # Getting Profile Pic first
             # First Check whether the file is selected or not
@@ -176,8 +180,8 @@ def addstudentsave(request):
                 course_obj = Courses.objects.get(id=course_id)
                 user.students.course_id=course_obj
                 user.students.gender = gender
-                user.students.session_start_year = session_start_year
-                user.students.session_end_year = session_end_year
+                session_year = SessionYearModel.objects.get(id=session_year_id)
+                user.students.session_year_id = session_year
                 user.students.profile_pic=profile_pic_url
                 user.save()
                 messages.success(request, f'Student Added Successfully..!!')
@@ -212,8 +216,8 @@ def editstudent(request, student_id):
     form.fields['address'].initial=student.address
     form.fields['course'].initial=student.course_id.id
     form.fields['gender'].initial=student.gender
-    form.fields['session_start_year'].initial=student.session_start_year
-    form.fields['session_end_year'].initial=student.session_end_year
+    form.fields['session_year_id'].initial=student.session_year_id.id
+    #form.fields['session_end_year'].initial=student.session_end_year
     form.fields['profile_pic'].initial=student.profile_pic
 
     context = {
@@ -241,8 +245,8 @@ def editstudentsave(request):
             address = form.cleaned_data["address"]
             course_id = form.cleaned_data["course"]
             gender = form.cleaned_data["gender"]
-            session_start_year = form.cleaned_data["session_start_year"]
-            session_end_year = form.cleaned_data["session_end_year"]
+            session_year_id = form.cleaned_data["session_year_id"]
+            #session_end_year = form.cleaned_data["session_end_year"]
 
             # Getting Profile Pic first
             # First Check whether the file is selected or not
@@ -269,12 +273,13 @@ def editstudentsave(request):
                 course = Courses.objects.get(id=course_id)
                 student.address=address
                 student.gender=gender
-                student.session_start_year=session_start_year
-                student.session_end_year=session_end_year
+                session_year = SessionYearModel.objects.get(id=session_year_id)
+                student.session_year_id=session_year
                 student.course_id=course
                 if profile_pic_url != None:
                     student.profile_pic=profile_pic_url
                 student.save()
+                # Delete student_id SESSION after the data is updated
                 del request.session['student_id']
                 messages.success(request, f'Student Edited Successfully..!!')
                 return HttpResponseRedirect(reverse("EditStudent", kwargs={"student_id": student_id}))
@@ -296,7 +301,7 @@ def addsubject(request):
     courses = Courses.objects.all()
     context = {
         'courses': courses,
-        'staffs': staffs
+        'staffs': staffs,
     }
     return render(request, "admin_templates/addsubject.html", context)
 
@@ -332,10 +337,10 @@ def editsubject(request, subject_id):
     courses = Courses.objects.all()
     staffs = CustomUser.objects.filter(user_type=2)
     context = {
-        'id': subject_id,
         'subject': subject,
         'courses': courses,
-        'staffs': staffs
+        'staffs': staffs,
+        'id': subject_id
     }
     return render(request, "admin_templates/editsubject.html", context)
 
@@ -346,19 +351,42 @@ def editsubjectsave(request):
     else:
         subject_id = request.POST.get("subject_id")
         subject_name = request.POST.get("subject_name")
-        staff_id = request.POST.get("staff")
         course_id = request.POST.get("course")
-        staff = CustomUser.objects.get(id=staff_id)
-        course = Courses.objects.get(id=course_id)
+        staff_id = request.POST.get("staff")        
 
         try:
             subject = Subjects.objetcs.get(id=subject_id)
-            subject.subject_name=subject_name
-            subject.staff_id=staff_id
-            subject.course_id=course_id
+            subject.subject_name = subject_name
+
+            course = Courses.objects.get(id=course_id)
+            subject.course_id = course
+
+            staff = CustomUser.objects.get(id=staff_id)
+            subject.staff_id = staff
+
             subject.save()
             messages.success(request, f'Subject Edited Successfully..!!')
             return HttpResponseRedirect(reverse("EditSubject", kwargs={"subject_id": subject_id}))
         except:
             messages.error(request, f'Failed To Edit Subject..!!')
             return HttpResponseRedirect(reverse("EditSubject", kwargs={"subject_id": subject_id}))
+
+def addsessionyear(request):
+    return render(request, "admin_templates/addsessionyear.html")
+
+def addsessionsave(request):
+    if request.method != "POST":
+        messages.error(request, f'Method is Not Allowed..!!')
+        return HttpResponseRedirect(reverse("AddSessionYear"))
+    else:
+        session_start_year = request.POST.get("session_start_year")
+        session_end_year = request.POST.get("session_end_year")
+
+        try:
+            sessionyear = SessionYearModel(session_start_year=session_start_year, session_end_year=session_end_year)
+            sessionyear.save()
+            messages.success(request, f'Session Year Added Successfully..!!')
+            return HttpResponseRedirect(reverse("AddSessionYear"))
+        except:
+            messages.error(request, f'Failed To Add Session Year..!!')
+            return HttpResponseRedirect(reverse("AddSessionYear"))

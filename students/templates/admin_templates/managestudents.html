@@ -58,8 +58,8 @@
                       <td>{{student.gender}}</td>
                       <td><img src="{{student.profile_pic}}" style="width: 50px;"></td>
                       <td>{{student.course_id.course_name}}</td>
-                      <td>{{student.session_start_year}}</td>
-                      <td>{{student.session_end_year}}</td>
+                      <td>{{student.session_year_id.session_start_year}}</td>
+                      <td>{{student.session_year_id.session_end_year}}</td>
                       <td>{{student.admin.date_joined}}</td>
                       <td>{{student.admin.last_login}}</td>
                       <td><a href={% url 'EditStudent' student_id=student.admin.id %} class="btn btn-info">Edit</a></td>

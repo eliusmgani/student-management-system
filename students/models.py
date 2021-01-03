@@ -5,11 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class SessionYearModel(models.Model):
-	id = models.AutoField(primary_key=True)
-	session_start_year = models.DateField()
-	session_end_year = models.DateField()
-
 class CustomUser(AbstractUser):
 	user_type_data = (
 		(1, "Admin"),
@@ -17,6 +12,12 @@ class CustomUser(AbstractUser):
 		(3, "Student")
 		)
 	user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
+
+class SessionYearModel(models.Model):
+	id = models.AutoField(primary_key=True)
+	session_start_year = models.DateField()
+	session_end_year = models.DateField()
+	objects = models.Manager()
 
 class AdminHOD(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -36,6 +37,7 @@ class Staffs(models.Model):
 class Courses(models.Model):
 	id = models.AutoField(primary_key=True)
 	course_name = models.CharField(max_length=255)
+	course_duration = models.CharField(max_length=10)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	objects = models.Manager()
@@ -148,15 +150,22 @@ class StudentResults(models.Model):
     objects = models.Manager()
 
 
+#Creating Django Signals
+
+# It's like trigger in database. It will run only when Data is Added in CustomUser model
+
 @receiver(post_save, sender=CustomUser)
+# Now Creating a Function which will automatically insert data in HOD, Staff or Student
 def create_user_profile(sender, instance, created, **kwargs):
+	# if created is true, means data is inserted
 	if created:
+		# Check the user_type and insert the data in respective tables
 		if instance.user_type==1:
 			AdminHOD.objects.create(admin=instance)
 		if instance.user_type==2:
 			Staffs.objects.create(admin=instance, address="" )
 		if instance.user_type==3:
-			Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), session_start_year="2020-10-10", session_end_year="2021-11-11", address="", gender="", profile_pic="")
+			Students.objects.create(admin=instance, course_id=Courses.objects.get(id=1), session_year_id=SessionYearModel.objects.get(id=1), address="", gender="", profile_pic="")
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):

@@ -18,16 +18,29 @@ class AddStudentForm(forms.Form):
 		("Feamale", "Female"),
 	}
 
-	courses = Courses.objects.all()
 	course_list = []
-	for course in courses:
-		small_course = (course.id, course.course_name)
-		course_list.append(small_course)
+	try:
+		courses = Courses.objects.all()
+		for course in courses:
+			small_course = (course.id, course.course_name)
+			course_list.append(small_course)
+	except:
+		course_list = []
+
+	session_list = []
+	try:
+		sessions = SessionYearModel.objects.all()
+		for ses in sessions:
+			ses = (ses.id, str(ses.session_start_year)+" -- "+str(ses.session_end_year))
+			session_list.append(ses)
+	except:
+		pass
+		#session_list = []
 
 	course = forms.ChoiceField(label="Course", choices=course_list, widget=forms.Select(attrs={"class": "form-control"}))
 	gender = forms.ChoiceField(label="Gender", choices=gender_choices, widget=forms.Select(attrs={"class": "form-control"}))
-	start_year = forms.DateField(label="Start Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
-	end_year = forms.DateField(label="End Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
+	session_year_id = forms.ChoiceField(label="Session Year", choices=session_list, widget=forms.Select(attrs={"class": "form-control"}))
+	#end_year = forms.DateField(label="End Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
 	profile_pic = forms.FileField(label="Profile Picture", widget=forms.FileInput(attrs={"class": "form-control"}))
 
 
@@ -49,8 +62,18 @@ class EditStudentForm(forms.Form):
 		small_course = (course.id, course.course_name)
 		course_list.append(small_course)
 
+	session_list = []
+	try:
+		sessions = SessionYearModel.objects.all()
+		for ses in sessions:
+			ses = (ses.id, str(ses.session_start_year)+" -- "+str(ses.session_end_year))
+			session_list.append(ses)
+	except:
+		pass
+		#session_list = []
+
 	course = forms.ChoiceField(label="Course", choices=course_list, widget=forms.Select(attrs={"class": "form-control"}))
 	gender = forms.ChoiceField(label="Gender", choices=gender_choices, widget=forms.Select(attrs={"class": "form-control"}))
-	session_start_year = forms.DateField(label="Start Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
-	session_end_year = forms.DateField(label="End Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
+	session_year_id = forms.ChoiceField(label="Session Year", choices=session_list, widget=forms.Select(attrs={"class": "form-control"}))
+	#session_end_year = forms.DateField(label="End Year", widget=forms.DateInput(attrs={"class": "form-control", "type": "date"}))
 	profile_pic = forms.FileField(label="Profile Picture", widget=forms.FileInput(attrs={"class": "form-control"}), required=False)

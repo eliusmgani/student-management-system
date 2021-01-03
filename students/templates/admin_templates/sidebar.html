@@ -109,6 +109,16 @@
           </a>
         </li>
         <li class="nav-item">
+          {% url 'AddSessionYear' as AddSessionYear %}
+          <a href="{{ AddSessionYear }}" class="nav-link" {% if request.path == AddSessionYear %} active {% endif %}>
+            <i class="nav-icon fas fa-th"></i>
+            <p>
+              Add Session Year
+              <span class="right badge badge-danger">New</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="{% url 'AddStaff' %}" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
             <p>
