@@ -98,7 +98,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-*.sqlite3
 .vagrant
 
 # JS files
@@ -111,11 +110,6 @@ ENV/
 *img/
 *js/
 *migrations/
-
-.md
-*.png
-*.jpeg
-*.jpg
 
 
 

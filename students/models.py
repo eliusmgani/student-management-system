@@ -37,7 +37,7 @@ class Staffs(models.Model):
 class Courses(models.Model):
 	id = models.AutoField(primary_key=True)
 	course_name = models.CharField(max_length=255)
-	course_duration = models.CharField(max_length=10)
+	#course_duration = models.CharField(max_length=10)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	objects = models.Manager()
