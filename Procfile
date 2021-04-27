@@ -1,0 +1,1 @@
+web: gunicorn shulesave.wsgi:application
