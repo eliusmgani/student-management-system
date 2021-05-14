@@ -110,7 +110,7 @@ ENV/
 *img/
 *js/
 *migrations/
-
+*-e git+https://github.com/frappe/bench@ac4c0efa3bc5be4ac72ad582444e39c7335fef2c#egg=frappe_bench
 
 
 #git config core.autocrlf true

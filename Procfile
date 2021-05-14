@@ -1,1 +1,1 @@
-web: gunicorn shulesave.wsgi:application
+web: gunicorn mgTech.wsgi --log-file -
